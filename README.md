@@ -60,7 +60,7 @@ $env:PYTHONPATH='src'
 
 ## GitHub Weekday Email
 
-The repository includes [weekday_email.yml](/C:/Users/User/Documents/Agent_math/.github/workflows/weekday_email.yml), which runs every Monday-Friday at 06:00 Asia/Bangkok and emails the review package to `lordtd@gmail.com`.
+The repository includes [weekday_email.yml](/C:/Users/User/Documents/Agent_math/.github/workflows/weekday_email.yml), which runs every Monday-Friday at 06:00 Asia/Bangkok and emails the review package to the address configured in `REVIEW_EMAIL_TO`.
 
 Behavior:
 
@@ -72,6 +72,7 @@ Behavior:
 
 Required GitHub Actions secrets:
 
+- `REVIEW_EMAIL_TO`
 - `SMTP_HOST`
 - `SMTP_PORT`
 - `SMTP_USERNAME`

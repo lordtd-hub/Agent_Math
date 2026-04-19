@@ -39,12 +39,12 @@ class EmailerTests(unittest.TestCase):
                 markdown_path=markdown_path,
                 json_path=json_path,
                 sender="sender@example.com",
-                recipient="lordtd@gmail.com",
+                recipient="review-recipient@example.com",
             )
 
         body = message.get_body(preferencelist=("plain",)).get_content()
         self.assertIn("2026-04-20", message["Subject"])
-        self.assertEqual(message["To"], "lordtd@gmail.com")
+        self.assertEqual(message["To"], "review-recipient@example.com")
         self.assertIn("Date Relevance Type: weekday_theme", body)
         self.assertIn("Potential repeat:", body)
         self.assertEqual(len(list(message.iter_attachments())), 2)

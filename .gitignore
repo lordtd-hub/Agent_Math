@@ -2,3 +2,11 @@ __pycache__/
 *.pyc
 .env
 .pytest_cache/
+outputs/**
+!outputs/
+!outputs/**/
+!outputs/**/.gitkeep
+data/candidate_cache/**
+!data/candidate_cache/
+!data/candidate_cache/.gitkeep
+specs/edocument_github_actions_design.md
