@@ -78,6 +78,22 @@ def _write_digest_log(run_json: str, settings, run_date: date) -> Path:
     return path
 
 
+def _prune_old_digest_logs(logs_dir: Path, run_date: date, lookback_days: int) -> int:
+    """Delete old digest logs outside the active read window."""
+
+    cutoff = run_date.toordinal() - lookback_days
+    removed = 0
+    for path in logs_dir.glob("*_edocument_digest.json"):
+        try:
+            file_date = date.fromisoformat(path.name[:10])
+        except ValueError:
+            continue
+        if file_date.toordinal() < cutoff:
+            path.unlink(missing_ok=True)
+            removed += 1
+    return removed
+
+
 def main(argv: list[str] | None = None) -> int:
     """Run one read-only eDocument digest cycle."""
 
@@ -100,10 +116,12 @@ def main(argv: list[str] | None = None) -> int:
     digest_run = client.collect_digest(run_at=run_at, lookback_days=lookback_days, max_documents=max_documents)
 
     log_path = _write_digest_log(render_digest_json(digest_run), settings, run_at.date())
+    pruned_logs = _prune_old_digest_logs(settings.logs_dir, run_at.date(), lookback_days)
     print(f"Digest status: {digest_run.status}")
     print(f"Scanned rows: {digest_run.scanned_rows}")
     print(f"Matched documents: {len(digest_run.matched_documents)}")
     print(f"Log path: {log_path}")
+    print(f"Pruned old digest logs: {pruned_logs}")
 
     if args.skip_email:
         print("Email skipped by flag.")
