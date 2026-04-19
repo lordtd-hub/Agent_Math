@@ -133,7 +133,7 @@ class WriterTests(unittest.TestCase):
             reason="OK",
         )
 
-    def test_standard_writer_generates_thai_post(self) -> None:
+    def test_standard_writer_generates_theme_based_disclaimer(self) -> None:
         draft = write_standard_topic_post(
             self.standard_candidate,
             self.standard_verification,
@@ -146,7 +146,7 @@ class WriterTests(unittest.TestCase):
         self.assertIn("วันนี้ภาควิชาคณิตศาสตร์ชวนมองเรื่อง", draft.body)
         self.assertIn(self.standard_candidate.title, draft.body)
         self.assertIn("วันที่ 2026-04-20", draft.why_relevant)
-        self.assertIn("ธีมของวันจันทร์", draft.why_relevant)
+        self.assertIn("ไม่ใช่การอ้างว่าเหตุการณ์นี้ตรงกับวันครบรอบจริงของวันนี้", draft.why_relevant)
         self.assertEqual(draft.hashtags, ["#คณิต(วิทย์)มรส.", "#MathSCISRU"])
         self.assertTrue(draft.fact_summary)
 

@@ -207,11 +207,13 @@ class ReviewPackage:
     run_date: date
     content_mode: str
     proposed_topic: str
+    date_relevance_type: str
     why_relevant: str
     thai_draft: str
     fact_summary: list[str]
     short_references: list[str]
     full_references: list[str]
+    duplicate_notes: list[str]
     verification_notes: list[str]
     confidence: float
     status: str

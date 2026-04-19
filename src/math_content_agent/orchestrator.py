@@ -31,6 +31,13 @@ from .verifier import verify_news_candidate, verify_standard_topic
 from .writer import write_news_post, write_standard_topic_post
 
 
+def _duplicate_notes_from_candidate(candidate) -> list[str]:
+    """Extract duplicate-history notes from candidate reasons for reviewer visibility."""
+
+    duplicate_prefixes = ("Potential repeat:", "Theme repeat note:")
+    return [reason for reason in getattr(candidate, "reasons", []) if reason.startswith(duplicate_prefixes)]
+
+
 @dataclass(frozen=True)
 class GenerationRunArtifacts:
     """Artifacts created by a weekday generation run."""
@@ -229,6 +236,7 @@ def generate_daily_review(
 
     if daily_plan.mode == "NEWS_MODE" and daily_plan.news_selection.selected_candidate is not None:
         candidate = daily_plan.news_selection.selected_candidate
+        duplicate_notes: list[str] = []
         bundle = retrieve_news_evidence(
             candidate,
             news_retrieval_provider or StaticNewsRetrievalProvider(),
@@ -248,6 +256,7 @@ def generate_daily_review(
             raise RuntimeError("Planner did not produce a selected candidate on a weekday run.")
         planner_debug_path = write_planner_debug(planner_run, settings.candidate_cache_dir, decision.evaluated_at)
         candidate = planner_run.selected_candidate
+        duplicate_notes = _duplicate_notes_from_candidate(candidate)
         bundle = retrieve_candidate_evidence(
             candidate,
             topic_retrieval_provider or StaticTopicRetrievalProvider(),
@@ -261,7 +270,13 @@ def generate_daily_review(
         draft = write_standard_topic_post(candidate, verification, bundle, decision.run_date, decision.weekday_name)
 
     evidence_bundle_path = write_raw_evidence_bundle(bundle, settings.raw_evidence_dir, decision.evaluated_at)
-    review = build_review_package(decision.run_date, draft, verification, bundle)
+    review = build_review_package(
+        decision.run_date,
+        draft,
+        verification,
+        bundle,
+        duplicate_notes=duplicate_notes,
+    )
     review_markdown_path, review_json_path = write_review_package(
         review,
         settings.daily_review_dir,
@@ -329,11 +344,13 @@ def publish_from_approval(
         run_date=updated_review.run_date,
         content_mode=updated_review.content_mode,
         proposed_topic=updated_review.proposed_topic,
+        date_relevance_type=updated_review.date_relevance_type,
         why_relevant=updated_review.why_relevant,
         thai_draft=updated_review.thai_draft,
         fact_summary=updated_review.fact_summary,
         short_references=updated_review.short_references,
         full_references=updated_review.full_references,
+        duplicate_notes=updated_review.duplicate_notes,
         verification_notes=updated_notes,
         confidence=updated_review.confidence,
         status=publish_result.status if gate_decision.can_publish else updated_review.status,

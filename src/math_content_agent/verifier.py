@@ -112,6 +112,10 @@ def verify_standard_topic(
         "Standard math topic verification requires explicit date linkage and multiple reliable sources.",
         f"Confidence threshold for publishability is {confidence_threshold:.2f}.",
     ]
+    if candidate.date_link_type == "weekday_theme":
+        notes.append("This topic is currently linked by weekday theme, not by an exact anniversary or exact historical date.")
+    elif candidate.date_link_type == "exact_date_link":
+        notes.append("This topic includes an exact date linkage that should be reflected clearly in the final wording.")
     reason = (
         "Standard topic passed baseline verification checks."
         if publishable

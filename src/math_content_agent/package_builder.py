@@ -37,6 +37,8 @@ def build_review_package(
     draft: DraftPost,
     verification: VerificationResult,
     bundle: EvidenceBundle,
+    *,
+    duplicate_notes: list[str] | None = None,
 ) -> ReviewPackage:
     """Build a structured review package."""
 
@@ -44,11 +46,13 @@ def build_review_package(
         run_date=run_date,
         content_mode=draft.content_mode,
         proposed_topic=draft.topic_title,
+        date_relevance_type=verification.date_link_type,
         why_relevant=draft.why_relevant,
         thai_draft=draft.body + ("\n\n" + " ".join(draft.hashtags) if draft.hashtags else ""),
         fact_summary=draft.fact_summary,
         short_references=_short_references(bundle),
         full_references=_full_references(bundle),
+        duplicate_notes=list(duplicate_notes or []),
         verification_notes=[*verification.verification_notes, *verification.conflicts, verification.reason],
         confidence=verification.confidence,
         status=_status_from_verification(verification),
@@ -61,11 +65,23 @@ def render_review_markdown(review: ReviewPackage) -> str:
     fact_summary = "\n".join(f"- {item}" for item in review.fact_summary) or "- ไม่มี"
     short_refs = "\n".join(f"{index}. {item}" for index, item in enumerate(review.short_references, start=1)) or "1. ไม่มี"
     full_refs = "\n".join(f"{index}. {item}" for index, item in enumerate(review.full_references, start=1)) or "1. ไม่มี"
-    verification_notes = "\n".join(f"- {item}" for item in review.verification_notes) if review.verification_notes else "- ไม่มี"
+    duplicate_notes = (
+        "\n".join(f"- {item}" for item in review.duplicate_notes)
+        if review.duplicate_notes
+        else "- No recent duplicate match found."
+    )
+    verification_notes = (
+        "\n".join(f"- {item}" for item in review.verification_notes)
+        if review.verification_notes
+        else "- ไม่มี"
+    )
     return f"""# Daily Math Post Draft - {review.run_date.isoformat()}
 
 ## Proposed Topic
 {review.proposed_topic}
+
+## Date Relevance Type
+{review.date_relevance_type}
 
 ## Why this matches today
 {review.why_relevant}
@@ -81,6 +97,9 @@ def render_review_markdown(review: ReviewPackage) -> str:
 
 ## Full References
 {full_refs}
+
+## Duplicate Check
+{duplicate_notes}
 
 ## Verification Notes
 {verification_notes}
@@ -123,11 +142,13 @@ def load_review_package(path: Path) -> ReviewPackage:
         run_date=date.fromisoformat(payload["run_date"]),
         content_mode=payload["content_mode"],
         proposed_topic=payload["proposed_topic"],
+        date_relevance_type=payload.get("date_relevance_type", "weekday_theme"),
         why_relevant=payload["why_relevant"],
         thai_draft=payload["thai_draft"],
         fact_summary=list(payload["fact_summary"]),
         short_references=list(payload["short_references"]),
         full_references=list(payload["full_references"]),
+        duplicate_notes=list(payload.get("duplicate_notes", [])),
         verification_notes=list(payload["verification_notes"]),
         confidence=float(payload["confidence"]),
         status=payload["status"],

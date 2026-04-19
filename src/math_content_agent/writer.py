@@ -38,17 +38,24 @@ def _first_fact_lines(bundle: EvidenceBundle, limit: int = 2) -> list[str]:
 
 
 def _standard_why_relevant(candidate: CandidateTopic, run_date: date, weekday_name: str) -> str:
-    """Explain the weekday linkage in Thai using the configured theme logic."""
+    """Explain the current date linkage clearly in Thai."""
 
     thai_weekday = THAI_WEEKDAYS.get(weekday_name, weekday_name)
+
+    if candidate.date_link_type == "exact_date_link":
+        return (
+            f"วันที่ {run_date.isoformat()} มีความเชื่อมโยงกับหัวข้อ \"{candidate.title}\" โดยตรง "
+            f"ผ่านเหตุการณ์หรือหมุดหมายทางประวัติศาสตร์ที่ตรวจสอบได้ จึงนับเป็นความเกี่ยวข้องกับวันนี้แบบตรงวันจริง"
+        )
+
     theme_explanation = STANDARD_THEME_EXPLANATIONS.get(
         candidate.theme_slug,
         f"ธีมของ{thai_weekday}ใช้คัดเลือกประเด็นคณิตศาสตร์ที่เหมาะกับการสื่อสารในวันนั้น",
     )
     return (
         f"วันที่ {run_date.isoformat()} ตรงกับ{thai_weekday} และ {theme_explanation} "
-        f"หัวข้อ \"{candidate.title}\" จึงเชื่อมกับวันผ่านกรอบธีมนี้อย่างชัดเจน "
-        f"ไม่ใช่เพียงเพราะเป็นเรื่องคณิตศาสตร์ทั่วไป"
+        f"หัวข้อ \"{candidate.title}\" จึงถูกเลือกเพราะเข้ากับธีมประจำวัน "
+        f"ไม่ใช่การอ้างว่าเหตุการณ์นี้ตรงกับวันครบรอบจริงของวันนี้"
     )
 
 
@@ -64,10 +71,21 @@ def write_standard_topic_post(
     del verification
     thai_weekday = THAI_WEEKDAYS.get(weekday_name, weekday_name)
     why_relevant = _standard_why_relevant(candidate, run_date, weekday_name)
+
+    if candidate.date_link_type == "exact_date_link":
+        relevance_line = (
+            f"สำหรับวันที่ {run_date.isoformat()} เราเลือกประเด็นนี้เพราะมีความเชื่อมโยงกับวันนี้โดยตรงจากข้อมูลประวัติศาสตร์ที่ตรวจสอบแล้ว"
+        )
+    else:
+        relevance_line = (
+            f"สำหรับวันที่ {run_date.isoformat()} เราเลือกประเด็นนี้เพราะตรงกับธีมประจำ{thai_weekday}ของเพจ "
+            f"และใช้เป็นหัวข้อชวนคิด ไม่ได้อ้างว่าเป็นวันครบรอบของเหตุการณ์นี้โดยตรง"
+        )
+
     body_lines = [
         f"วันนี้ภาควิชาคณิตศาสตร์ชวนมองเรื่อง {candidate.title}",
         "จากแหล่งอ้างอิงที่ตรวจสอบแล้ว หัวข้อนี้ช่วยให้เห็นว่าคณิตศาสตร์ไม่ได้มีแค่สูตร แต่มีบริบททางความคิดและพัฒนาการที่น่าสนใจ",
-        f"สำหรับวันที่ {run_date.isoformat()} เราเลือกประเด็นนี้เพราะตรงกับธีมประจำ{thai_weekday}ของเพจ ซึ่งเน้นการเล่าเรื่องคณิตศาสตร์ให้เห็นความหมายและที่มาอย่างชัดเจน",
+        relevance_line,
         "ถ้ามีหัวข้อหรือมุมมองที่อยากให้เพจชวนคุยเพิ่มเติม สามารถฝากไว้ได้ในคอมเมนต์",
     ]
     return DraftPost(

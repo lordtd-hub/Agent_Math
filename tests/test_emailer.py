@@ -17,11 +17,13 @@ class EmailerTests(unittest.TestCase):
             run_date=date(2026, 4, 20),
             content_mode="STANDARD_MATH_MODE",
             proposed_topic="Gauss กับจุดเปลี่ยนของทฤษฎีจำนวน",
-            why_relevant="วันที่ 2026-04-20 ตรงกับธีมวันจันทร์ของเพจ",
+            date_relevance_type="weekday_theme",
+            why_relevant="วันที่ 2026-04-20 ตรงกับวันจันทร์ และหัวข้อนี้ถูกเลือกเพราะเข้ากับธีมประจำวัน",
             thai_draft="ร่างโพสต์ภาษาไทย",
             fact_summary=["ข้อเท็จจริงที่ผ่านการตรวจสอบ"],
             short_references=["AMS - Gauss biography"],
             full_references=["AMS. Gauss biography. https://www.ams.org/gauss"],
+            duplicate_notes=["Potential repeat: the same mathematician or concept appeared on 2026-04-10 (PUBLISHED)."],
             verification_notes=["พร้อมให้ผู้ดูแลตรวจ"],
             confidence=0.90,
             status="PENDING_REVIEW",
@@ -40,8 +42,11 @@ class EmailerTests(unittest.TestCase):
                 recipient="lordtd@gmail.com",
             )
 
+        body = message.get_body(preferencelist=("plain",)).get_content()
         self.assertIn("2026-04-20", message["Subject"])
         self.assertEqual(message["To"], "lordtd@gmail.com")
+        self.assertIn("Date Relevance Type: weekday_theme", body)
+        self.assertIn("Potential repeat:", body)
         self.assertEqual(len(list(message.iter_attachments())), 2)
 
 

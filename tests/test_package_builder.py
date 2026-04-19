@@ -51,10 +51,10 @@ class PackageBuilderTests(unittest.TestCase):
         self.draft = DraftPost(
             content_mode="STANDARD_MATH_MODE",
             topic_title="Gauss กับจุดเปลี่ยนของทฤษฎีจำนวน",
-            why_relevant="วันที่ 2026-04-20 ตรงกับธีมวันจันทร์ของเพจ",
+            why_relevant="วันที่ 2026-04-20 ตรงกับวันจันทร์ และหัวข้อนี้ถูกเลือกเพราะเข้ากับธีมประจำวัน",
             body="วันนี้ภาควิชาคณิตศาสตร์ชวนมองเรื่อง Gauss กับจุดเปลี่ยนของทฤษฎีจำนวน",
             fact_summary=["AMS: Historical source describing Gauss and number theory."],
-            hashtags=["#คณิตศาสตร์"],
+            hashtags=["#คณิต(วิทย์)มรส.", "#MathSCISRU"],
         )
         self.good_verification = VerificationResult(
             content_mode="STANDARD_MATH_MODE",
@@ -82,11 +82,19 @@ class PackageBuilderTests(unittest.TestCase):
         )
 
     def test_build_review_package_uses_pending_review_for_publishable(self) -> None:
-        review = build_review_package(date(2026, 4, 20), self.draft, self.good_verification, self.bundle)
+        review = build_review_package(
+            date(2026, 4, 20),
+            self.draft,
+            self.good_verification,
+            self.bundle,
+            duplicate_notes=["Potential repeat: the same topic title appeared on 2026-04-01 (PUBLISHED)."],
+        )
 
         self.assertEqual(review.status, "PENDING_REVIEW")
-        self.assertIn("#คณิตศาสตร์", review.thai_draft)
+        self.assertIn("#คณิต(วิทย์)มรส.", review.thai_draft)
+        self.assertEqual(review.date_relevance_type, "weekday_theme")
         self.assertEqual(len(review.short_references), 2)
+        self.assertTrue(review.duplicate_notes)
 
     def test_build_review_package_blocks_low_confidence(self) -> None:
         review = build_review_package(date(2026, 4, 20), self.draft, self.bad_verification, self.bundle)
@@ -97,7 +105,13 @@ class PackageBuilderTests(unittest.TestCase):
     def test_write_review_package_outputs_markdown_and_json(self) -> None:
         settings = load_settings(env={})
         ensure_runtime_dirs(settings)
-        review = build_review_package(date(2026, 4, 20), self.draft, self.good_verification, self.bundle)
+        review = build_review_package(
+            date(2026, 4, 20),
+            self.draft,
+            self.good_verification,
+            self.bundle,
+            duplicate_notes=["Theme repeat note: this weekday theme was also used on 2026-04-10 (PUBLISHED)."],
+        )
 
         markdown_path, json_path = write_review_package(
             review,
@@ -108,8 +122,10 @@ class PackageBuilderTests(unittest.TestCase):
         payload = json.loads(json_path.read_text(encoding="utf-8"))
 
         self.assertIn("## Draft Facebook Post", markdown_text)
+        self.assertIn("## Duplicate Check", markdown_text)
         self.assertEqual(payload["status"], "PENDING_REVIEW")
         self.assertEqual(payload["proposed_topic"], self.draft.topic_title)
+        self.assertEqual(payload["date_relevance_type"], "weekday_theme")
 
 
 if __name__ == "__main__":

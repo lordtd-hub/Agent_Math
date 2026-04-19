@@ -60,18 +60,32 @@ def calculate_duplicate_penalty(
     penalty = 0.0
     notes: list[str] = []
 
-    if any(entry.topic.casefold() == candidate.title.casefold() for entry in recent_entries):
+    matching_topics = [entry for entry in recent_entries if entry.topic.casefold() == candidate.title.casefold()]
+    if matching_topics:
+        latest = max(matching_topics, key=lambda entry: entry.date)
         penalty += settings.duplicate_topic_penalty
-        notes.append("Recent history contains the same topic title, so the score is reduced.")
+        notes.append(
+            f"Potential repeat: the same topic title appeared on {latest.date.isoformat()} ({latest.status or 'UNKNOWN'})."
+        )
 
-    if candidate.entity and any(
-        entry.entity.casefold() == candidate.entity.casefold() for entry in recent_entries if entry.entity
-    ):
+    matching_entities = [
+        entry
+        for entry in recent_entries
+        if candidate.entity and entry.entity and entry.entity.casefold() == candidate.entity.casefold()
+    ]
+    if matching_entities:
+        latest = max(matching_entities, key=lambda entry: entry.date)
         penalty += settings.duplicate_entity_penalty
-        notes.append("Recent history contains the same mathematician or concept, so the score is reduced.")
+        notes.append(
+            f"Potential repeat: the same mathematician or concept appeared on {latest.date.isoformat()} ({latest.status or 'UNKNOWN'})."
+        )
 
-    if any(entry.theme.casefold() == candidate.theme_slug.casefold() for entry in recent_entries):
+    matching_themes = [entry for entry in recent_entries if entry.theme.casefold() == candidate.theme_slug.casefold()]
+    if matching_themes:
+        latest = max(matching_themes, key=lambda entry: entry.date)
         penalty += settings.duplicate_theme_penalty
-        notes.append("This weekday theme appeared recently, so a small repeat penalty was applied.")
+        notes.append(
+            f"Theme repeat note: this weekday theme was also used on {latest.date.isoformat()} ({latest.status or 'UNKNOWN'})."
+        )
 
     return penalty, notes

@@ -24,11 +24,13 @@ class ApprovalTests(unittest.TestCase):
             run_date=date(2026, 4, 20),
             content_mode="STANDARD_MATH_MODE",
             proposed_topic="Gauss กับจุดเปลี่ยนของทฤษฎีจำนวน",
-            why_relevant="วันที่ 2026-04-20 ตรงกับธีมวันจันทร์ของเพจ",
+            date_relevance_type="weekday_theme",
+            why_relevant="วันที่ 2026-04-20 ตรงกับวันจันทร์ และหัวข้อนี้ถูกเลือกเพราะเข้ากับธีมประจำวัน",
             thai_draft="ร่างโพสต์ภาษาไทย",
             fact_summary=["ข้อเท็จจริงที่ผ่านการตรวจสอบ"],
             short_references=["AMS - Gauss biography"],
             full_references=["AMS. Gauss biography. https://www.ams.org/gauss"],
+            duplicate_notes=["Theme repeat note: this weekday theme was also used on 2026-04-10 (PUBLISHED)."],
             verification_notes=["พร้อมให้ผู้ดูแลตรวจ"],
             confidence=0.90,
             status="PENDING_REVIEW",
@@ -50,13 +52,7 @@ class ApprovalTests(unittest.TestCase):
 
     def test_parse_approval_payload_rejects_invalid_status(self) -> None:
         with self.assertRaises(ApprovalValidationError):
-            parse_approval_payload(
-                {
-                    "date": "2026-04-20",
-                    "status": "PUBLISH_NOW",
-                    "reviewer": "admin",
-                }
-            )
+            parse_approval_payload({"date": "2026-04-20", "status": "PUBLISH_NOW", "reviewer": "admin"})
 
     def test_approval_template_is_written(self) -> None:
         settings = load_settings(env={})
@@ -92,12 +88,7 @@ class ApprovalTests(unittest.TestCase):
     def test_approved_review_allows_publish(self) -> None:
         decision = evaluate_approval(
             self.review,
-            ApprovalRecord(
-                run_date=date(2026, 4, 20),
-                status="APPROVED",
-                reviewer="admin",
-                notes="พร้อมโพสต์",
-            ),
+            ApprovalRecord(run_date=date(2026, 4, 20), status="APPROVED", reviewer="admin", notes="พร้อมโพสต์"),
         )
 
         self.assertTrue(decision.can_publish)
@@ -106,12 +97,7 @@ class ApprovalTests(unittest.TestCase):
     def test_revision_request_blocks_publish(self) -> None:
         decision = evaluate_approval(
             self.review,
-            ApprovalRecord(
-                run_date=date(2026, 4, 20),
-                status="NEEDS_REVISION",
-                reviewer="admin",
-                notes="ช่วยปรับน้ำเสียงให้กระชับขึ้น",
-            ),
+            ApprovalRecord(run_date=date(2026, 4, 20), status="NEEDS_REVISION", reviewer="admin", notes="ช่วยปรับก่อน"),
         )
 
         self.assertFalse(decision.can_publish)
@@ -120,12 +106,7 @@ class ApprovalTests(unittest.TestCase):
     def test_mismatched_date_fails_safely(self) -> None:
         decision = evaluate_approval(
             self.review,
-            ApprovalRecord(
-                run_date=date(2026, 4, 21),
-                status="APPROVED",
-                reviewer="admin",
-                notes="พร้อมโพสต์",
-            ),
+            ApprovalRecord(run_date=date(2026, 4, 21), status="APPROVED", reviewer="admin", notes="พร้อมโพสต์"),
         )
 
         self.assertFalse(decision.can_publish)
@@ -134,12 +115,7 @@ class ApprovalTests(unittest.TestCase):
     def test_apply_approval_to_review_updates_status_and_notes(self) -> None:
         updated = apply_approval_to_review(
             self.review,
-            ApprovalRecord(
-                run_date=date(2026, 4, 20),
-                status="NEEDS_REVISION",
-                reviewer="admin",
-                notes="ช่วยเพิ่มคำอธิบายสั้น ๆ สำหรับผู้อ่านทั่วไป",
-            ),
+            ApprovalRecord(run_date=date(2026, 4, 20), status="NEEDS_REVISION", reviewer="admin", notes="ช่วยเพิ่มคำอธิบาย"),
         )
 
         self.assertEqual(updated.status, "NEEDS_REVISION")
