@@ -146,6 +146,8 @@ class WriterTests(unittest.TestCase):
         self.assertIn("วันนี้ภาควิชาคณิตศาสตร์ชวนมองเรื่อง", draft.body)
         self.assertIn(self.standard_candidate.title, draft.body)
         self.assertIn("วันที่ 2026-04-20", draft.why_relevant)
+        self.assertIn("ธีมของวันจันทร์", draft.why_relevant)
+        self.assertEqual(draft.hashtags, ["#คณิต(วิทย์)มรส.", "#MathSCISRU"])
         self.assertTrue(draft.fact_summary)
 
     def test_news_writer_generates_thai_news_post(self) -> None:
@@ -160,6 +162,7 @@ class WriterTests(unittest.TestCase):
         self.assertIn("ข่าววิทยาศาสตร์วันนี้", draft.body)
         self.assertIn(self.news_candidate.math_relevance, draft.body)
         self.assertIn("2026-04-18", draft.why_relevant)
+        self.assertEqual(draft.hashtags, ["#คณิต(วิทย์)มรส.", "#MathSCISRU"])
         self.assertTrue(draft.fact_summary)
 
 
