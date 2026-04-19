@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "0 23 * * 0-4"
   workflow_dispatch:
+    inputs:
+      review_now:
+        description: "Optional ISO timestamp override for manual testing, e.g. 2026-04-20T06:00:00+07:00"
+        required: false
+        type: string
 
 jobs:
   generate-and-email:
@@ -30,15 +35,39 @@ jobs:
           python-version: "3.12"
 
       - name: Generate daily review
-        run: python -m math_content_agent.scheduler generate-review
+        id: generate_review
+        run: |
+          if [ -n "${{ github.event.inputs.review_now }}" ]; then
+            python -m math_content_agent.scheduler generate-review --now "${{ github.event.inputs.review_now }}"
+            review_date="${{ github.event.inputs.review_now }}"
+            review_date="${review_date%%T*}"
+          else
+            python -m math_content_agent.scheduler generate-review
+            review_date=$(TZ=Asia/Bangkok date +%F)
+          fi
+
+          if [ -f "outputs/verification_json/${review_date}_review.json" ]; then
+            echo "review_generated=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "review_generated=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "review_date=${review_date}" >> "$GITHUB_OUTPUT"
 
       - name: Email daily review
-        run: python -m math_content_agent.emailer
+        if: steps.generate_review.outputs.review_generated == 'true'
+        run: python -m math_content_agent.emailer --review-date "${{ steps.generate_review.outputs.review_date }}"
+
+      - name: Skip email when no review is generated
+        if: steps.generate_review.outputs.review_generated != 'true'
+        run: echo "No review artifact was generated for ${{ steps.generate_review.outputs.review_date }}. This is expected on weekends or skip days."
 
       - name: Upload generated artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: daily-review-artifacts
+          if-no-files-found: ignore
           path: |
             outputs/daily_reviews/
             outputs/verification_json/

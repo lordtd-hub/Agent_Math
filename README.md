@@ -83,7 +83,7 @@ Recommended setup notes:
 
 - Use an SMTP account or app password dedicated to automation.
 - The workflow schedule uses UTC under the hood, but it is already mapped to 06:00 Bangkok time.
-- If you want to test it immediately, use `workflow_dispatch` from the Actions tab.
+- If you want to test it immediately from the Actions tab on a weekend, run `workflow_dispatch` and set `review_now` to a weekday timestamp such as `2026-04-20T06:00:00+07:00`.
 
 ## Project Layout
 
