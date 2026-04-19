@@ -98,10 +98,20 @@ class EDocumentClient:
         page.fill("#password", self._password)
         page.locator("button").click()
         page.wait_for_load_state("networkidle")
+        page.wait_for_timeout(2_000)
+
+        current_url = page.url.lower()
+        body_text = page.locator("body").inner_text()
+        if "/api/auth/login" in current_url or "เข้าสู่ระบบ" in body_text:
+            raise RuntimeError("Login did not complete successfully on the runner.")
 
     def _open_saraban(self, page) -> str:
         page.goto("https://sru.e-office.cloud/saraban", wait_until="networkidle")
         page.wait_for_timeout(2_000)
+        body_text = page.locator("body").inner_text()
+        if "หนังสือรับ" not in body_text and "รอรับ" not in body_text and "ไม่มีรายการ" not in body_text:
+            body_preview = " ".join(body_text.split())[:300]
+            raise RuntimeError(f"Saraban page did not load expected content. url={page.url} preview={body_preview}")
         return page.url
 
     def _list_rows(self, page) -> list[tuple[int, str]]:

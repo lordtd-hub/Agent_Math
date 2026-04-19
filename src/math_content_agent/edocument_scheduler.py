@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import traceback
 from datetime import date, datetime
 from pathlib import Path
 
@@ -114,14 +115,19 @@ def main(argv: list[str] | None = None) -> int:
         recipient=str(smtp_config["recipient"]),
         sender=str(smtp_config["sender"]),
     )
-    send_review_email(
-        message=message,
-        smtp_host=str(smtp_config["smtp_host"]),
-        smtp_port=int(smtp_config["smtp_port"]),
-        smtp_username=str(smtp_config["smtp_username"]),
-        smtp_password=str(smtp_config["smtp_password"]),
-        use_tls=bool(smtp_config["use_tls"]),
-    )
+    try:
+        send_review_email(
+            message=message,
+            smtp_host=str(smtp_config["smtp_host"]),
+            smtp_port=int(smtp_config["smtp_port"]),
+            smtp_username=str(smtp_config["smtp_username"]),
+            smtp_password=str(smtp_config["smtp_password"]),
+            use_tls=bool(smtp_config["use_tls"]),
+        )
+    except Exception as exc:
+        print(f"Email send failed: {exc}")
+        traceback.print_exc()
+        raise
     print(f"Emailed eDocument digest to {smtp_config['recipient']}")
     return 0
 
