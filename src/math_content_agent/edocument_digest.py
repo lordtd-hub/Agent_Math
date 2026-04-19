@@ -147,6 +147,10 @@ def summarize_document(document: EDocumentDigestDocument) -> list[str]:
     else:
         summary.append("ไฟล์แนบ: ไม่พบไฟล์แนบที่อ่านได้จากหน้าแฟ้มเอกสาร")
 
+    if detail and detail.attachment_summaries:
+        for attachment_summary in detail.attachment_summaries[:3]:
+            summary.append("สาระจากไฟล์แนบ: " + attachment_summary)
+
     return summary
 
 

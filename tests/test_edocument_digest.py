@@ -108,6 +108,7 @@ class EDocumentDigestTests(unittest.TestCase):
             purpose="เพื่อโปรดทราบ",
             detail_note="มีไฟล์แนบ 2 รายการ",
             attachment_names=["test.pdf"],
+            attachment_summaries=["test.pdf: สรุปสาระสำคัญจากไฟล์แนบ"],
         )
         document = EDocumentDigestDocument(listing=entry, detail=detail)
 
@@ -116,6 +117,7 @@ class EDocumentDigestTests(unittest.TestCase):
         self.assertIn("เลขที่หนังสือ: ทดสอบ/1", summary)
         self.assertIn("ชั้นความเร็ว: ด่วน", summary)
         self.assertIn("ไฟล์แนบ: test.pdf", summary)
+        self.assertIn("สาระจากไฟล์แนบ: test.pdf: สรุปสาระสำคัญจากไฟล์แนบ", summary)
 
 
 if __name__ == "__main__":

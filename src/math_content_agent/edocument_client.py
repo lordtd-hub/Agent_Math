@@ -4,7 +4,10 @@ from __future__ import annotations
 
 from dataclasses import replace
 from datetime import datetime
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
+from .edocument_attachments import extract_attachment_preview
 from .edocument_digest import (
     extract_attachment_names,
     extract_label_value,
@@ -49,36 +52,44 @@ class EDocumentClient:
         matched_documents: list[EDocumentDigestDocument] = []
         errors: list[str] = []
 
-        with sync_playwright() as playwright:
-            browser = playwright.chromium.launch(headless=self._headless)
-            page = browser.new_page(viewport={"width": 1440, "height": 960})
-            page.set_default_timeout(self._page_timeout_ms)
-            try:
-                self._login(page)
-                list_url = self._open_saraban(page)
-                row_texts = self._list_rows(page)
-                scanned_rows = len(row_texts)
+        with TemporaryDirectory(prefix="edoc-digest-") as temp_dir:
+            download_dir = Path(temp_dir)
+            with sync_playwright() as playwright:
+                browser = playwright.chromium.launch(headless=self._headless)
+                context = browser.new_context(viewport={"width": 1440, "height": 960}, accept_downloads=True)
+                page = context.new_page()
+                page.set_default_timeout(self._page_timeout_ms)
+                try:
+                    self._login(page)
+                    list_url = self._open_saraban(page)
+                    row_texts = self._list_rows(page)
+                    scanned_rows = len(row_texts)
 
-                matching_indexes: list[int] = []
-                for row_index, row_text in row_texts:
-                    entry = parse_listing_row(row_index=row_index, row_text=row_text)
-                    if should_include_entry(entry, run_at.date(), lookback_days):
-                        matching_indexes.append(row_index)
-                    if len(matching_indexes) >= max_documents:
-                        break
+                    matching_indexes: list[int] = []
+                    for row_index, row_text in row_texts:
+                        entry = parse_listing_row(row_index=row_index, row_text=row_text)
+                        if should_include_entry(entry, run_at.date(), lookback_days):
+                            matching_indexes.append(row_index)
+                        if len(matching_indexes) >= max_documents:
+                            break
 
-                for row_index in matching_indexes:
-                    try:
-                        document = self._collect_document(page, list_url=list_url, row_index=row_index)
-                        matched_documents.append(replace(document, summary_points=summarize_document(document)))
-                    except PlaywrightTimeoutError as exc:
-                        errors.append(f"เปิดเอกสารแถวที่ {row_index} ไม่สำเร็จ: {exc}")
-                        page.goto(list_url, wait_until="networkidle")
-                    except Exception as exc:  # pragma: no cover - live portal failure path
-                        errors.append(f"แถวที่ {row_index} เกิดข้อผิดพลาด: {exc}")
-                        page.goto(list_url, wait_until="networkidle")
-            finally:
-                browser.close()
+                    for row_index in matching_indexes:
+                        try:
+                            document = self._collect_document(
+                                page,
+                                list_url=list_url,
+                                row_index=row_index,
+                                download_dir=download_dir,
+                            )
+                            matched_documents.append(replace(document, summary_points=summarize_document(document)))
+                        except PlaywrightTimeoutError as exc:
+                            errors.append(f"เปิดเอกสารแถวที่ {row_index} ไม่สำเร็จ: {exc}")
+                            page.goto(list_url, wait_until="networkidle")
+                        except Exception as exc:  # pragma: no cover - live portal failure path
+                            errors.append(f"แถวที่ {row_index} เกิดข้อผิดพลาด: {exc}")
+                            page.goto(list_url, wait_until="networkidle")
+                finally:
+                    browser.close()
 
         status = "ok" if not errors else ("partial_success" if matched_documents or scanned_rows else "error")
         return EDocumentDigestRun(
@@ -123,7 +134,7 @@ class EDocumentClient:
                 cleaned_rows.append((row_index, compact))
         return cleaned_rows
 
-    def _collect_document(self, page, *, list_url: str, row_index: int) -> EDocumentDigestDocument:
+    def _collect_document(self, page, *, list_url: str, row_index: int, download_dir: Path) -> EDocumentDigestDocument:
         page.goto(list_url, wait_until="networkidle")
         page.wait_for_timeout(1_500)
         row_text = " ".join(page.locator("table tr").nth(row_index).inner_text().split())
@@ -142,7 +153,8 @@ class EDocumentClient:
             page.wait_for_load_state("networkidle")
             page.wait_for_timeout(1_500)
             attachments = extract_attachment_names(self._body_lines(page))
-            detail = replace(detail, attachment_names=attachments)
+            attachment_summaries = self._download_and_summarize_attachments(page, download_dir, warnings)
+            detail = replace(detail, attachment_names=attachments, attachment_summaries=attachment_summaries)
             if not attachments:
                 warnings.append("ไม่สามารถดึงรายชื่อไฟล์แนบจากหน้าแฟ้มเอกสารได้")
         else:
@@ -165,3 +177,39 @@ class EDocumentClient:
             purpose=extract_label_value(lines, "เพื่อ :"),
             detail_note=extract_label_value(lines, "รายละเอียดเพิ่มเติม :"),
         )
+
+    def _download_and_summarize_attachments(self, page, download_dir: Path, warnings: list[str]) -> list[str]:
+        item_locators = page.locator('[id^="prep-file-list-"]')
+        total = item_locators.count()
+        summaries: list[str] = []
+        download_button = page.locator("#prep-download-file-btn")
+
+        for index in range(total):
+            item_locators.nth(index).click()
+            page.wait_for_timeout(1_500)
+
+            if download_button.count() == 0 or download_button.is_disabled():
+                warnings.append(f"ไฟล์แนบลำดับ {index + 1} ไม่สามารถกดดาวน์โหลดได้")
+                continue
+
+            try:
+                with page.expect_download(timeout=15_000) as download_info:
+                    download_button.click()
+                download = download_info.value
+            except Exception as exc:  # pragma: no cover - live portal failure path
+                warnings.append(f"ดาวน์โหลดไฟล์แนบลำดับ {index + 1} ไม่สำเร็จ: {exc}")
+                continue
+
+            suggested_name = download.suggested_filename
+            safe_name = suggested_name.replace("\\", "_").replace("/", "_")
+            target_path = download_dir / safe_name
+            download.save_as(target_path)
+            try:
+                preview = extract_attachment_preview(target_path)
+                if preview:
+                    summaries.append(f"{suggested_name}: {preview}")
+                else:
+                    warnings.append(f"อ่านไฟล์แนบได้แต่ดึงข้อความสำคัญไม่ได้: {suggested_name}")
+            except Exception as exc:  # pragma: no cover - depends on file type/content
+                warnings.append(f"อ่านไฟล์แนบไม่สำเร็จ {suggested_name}: {exc}")
+        return summaries

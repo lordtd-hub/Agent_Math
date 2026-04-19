@@ -287,6 +287,7 @@ class EDocumentDetail:
     purpose: str | None
     detail_note: str | None
     attachment_names: list[str] = field(default_factory=list)
+    attachment_summaries: list[str] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
