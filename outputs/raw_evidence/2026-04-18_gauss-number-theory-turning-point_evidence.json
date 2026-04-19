@@ -1,0 +1,41 @@
+{
+  "content_mode": "STANDARD_MATH_MODE",
+  "candidate_slug": "gauss-number-theory-turning-point",
+  "candidate_title": "Gauss กับจุดเปลี่ยนของทฤษฎีจำนวน",
+  "generated_at": "2026-04-18T14:33:11+00:00",
+  "allowed_items": [
+    {
+      "title": "Carl Friedrich Gauss",
+      "source": "MacTutor",
+      "url": "https://mathshistory.st-andrews.ac.uk/Biographies/Gauss/",
+      "excerpt": "Historical source describing Gauss and his foundational work in number theory in 1801.",
+      "source_type": "reference",
+      "source_tier": "tier_2",
+      "published_at": "2024-01-01",
+      "content_mode": "STANDARD_MATH_MODE",
+      "candidate_slug": "gauss-number-theory-turning-point",
+      "candidate_title": "Gauss กับจุดเปลี่ยนของทฤษฎีจำนวน",
+      "confidence_notes": [
+        "Source matched allowlist tier tier_2.",
+        "Published/page date metadata was captured for later date relevance checks."
+      ]
+    },
+    {
+      "title": "Gauss and Disquisitiones Arithmeticae",
+      "source": "AMS",
+      "url": "https://www.ams.org/publicoutreach/math-history/gauss",
+      "excerpt": "AMS notes that Gauss helped reshape number theory, with 1801 often cited as a turning point.",
+      "source_type": "reference",
+      "source_tier": "tier_1",
+      "published_at": "2024-01-02",
+      "content_mode": "STANDARD_MATH_MODE",
+      "candidate_slug": "gauss-number-theory-turning-point",
+      "candidate_title": "Gauss กับจุดเปลี่ยนของทฤษฎีจำนวน",
+      "confidence_notes": [
+        "Source matched allowlist tier tier_1.",
+        "Published/page date metadata was captured for later date relevance checks."
+      ]
+    }
+  ],
+  "rejected_urls": []
+}

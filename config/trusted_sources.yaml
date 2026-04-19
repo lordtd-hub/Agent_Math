@@ -1,0 +1,37 @@
+{
+  "tiers": {
+    "tier_1": {
+      "description": "Authoritative or institutional sources for core factual claims.",
+      "domains": [
+        "ams.org",
+        "maa.org",
+        "siam.org",
+        "springer.com",
+        "cambridge.org"
+      ]
+    },
+    "tier_2": {
+      "description": "High-quality mathematical references that can support verification.",
+      "domains": [
+        "mathshistory.st-andrews.ac.uk",
+        "mathworld.wolfram.com",
+        "encyclopediaofmath.org",
+        "britannica.com"
+      ]
+    },
+    "tier_3": {
+      "description": "Background-only sources that cannot stand alone for critical claims.",
+      "domains": [
+        "wikipedia.org"
+      ]
+    }
+  },
+  "prohibited_source_types": [
+    "anonymous_blog",
+    "content_farm",
+    "ai_generated_page",
+    "meme_page",
+    "social_repost",
+    "unverified_quote_site"
+  ]
+}

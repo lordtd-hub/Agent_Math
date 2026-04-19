@@ -1,0 +1,22 @@
+{
+  "Monday": {
+    "slug": "history",
+    "label": "Mathematician birthdays and history"
+  },
+  "Tuesday": {
+    "slug": "theorem",
+    "label": "Theorem spotlight"
+  },
+  "Wednesday": {
+    "slug": "puzzle",
+    "label": "Puzzle or paradox"
+  },
+  "Thursday": {
+    "slug": "notation",
+    "label": "Notation and the language of mathematics"
+  },
+  "Friday": {
+    "slug": "applications",
+    "label": "Mathematics in real life"
+  }
+}

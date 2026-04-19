@@ -1,0 +1,132 @@
+{
+  "run_date": "2026-04-20",
+  "weekday_name": "Monday",
+  "theme_slug": "history",
+  "theme_label": "Mathematician birthdays and history",
+  "output_language": "th",
+  "selected_candidate": {
+    "title": "Gauss กับจุดเปลี่ยนของทฤษฎีจำนวน",
+    "slug": "gauss-number-theory-turning-point",
+    "theme_slug": "history",
+    "theme_label": "Mathematician birthdays and history",
+    "angle": "historical_profile",
+    "entity": "Carl Friedrich Gauss",
+    "date_link_type": "weekday_theme",
+    "date_link_explanation": "This candidate fits the scheduled weekday theme for 2026-04-20, which is mathematician birthdays and history.",
+    "reasons": [
+      "Matches the Monday theme: Mathematician birthdays and history.",
+      "Suitable for Thai-language drafting after verification on 2026-04-20.",
+      "Any factual claims still require trusted-source retrieval and explicit date-link verification before posting.",
+      "This weekday theme appeared recently, so a small repeat penalty was applied."
+    ],
+    "base_score": 0.72,
+    "duplicate_penalty": 0.05,
+    "final_score": 0.6699999999999999,
+    "requires_retrieval": true
+  },
+  "candidates": [
+    {
+      "title": "Gauss กับจุดเปลี่ยนของทฤษฎีจำนวน",
+      "slug": "gauss-number-theory-turning-point",
+      "theme_slug": "history",
+      "theme_label": "Mathematician birthdays and history",
+      "angle": "historical_profile",
+      "entity": "Carl Friedrich Gauss",
+      "date_link_type": "weekday_theme",
+      "date_link_explanation": "This candidate fits the scheduled weekday theme for 2026-04-20, which is mathematician birthdays and history.",
+      "reasons": [
+        "Matches the Monday theme: Mathematician birthdays and history.",
+        "Suitable for Thai-language drafting after verification on 2026-04-20.",
+        "Any factual claims still require trusted-source retrieval and explicit date-link verification before posting.",
+        "This weekday theme appeared recently, so a small repeat penalty was applied."
+      ],
+      "base_score": 0.72,
+      "duplicate_penalty": 0.05,
+      "final_score": 0.6699999999999999,
+      "requires_retrieval": true
+    },
+    {
+      "title": "Ramanujan และพลังของการมองเห็นรูปแบบ",
+      "slug": "ramanujan-pattern-insight",
+      "theme_slug": "history",
+      "theme_label": "Mathematician birthdays and history",
+      "angle": "historical_profile",
+      "entity": "Srinivasa Ramanujan",
+      "date_link_type": "weekday_theme",
+      "date_link_explanation": "This candidate fits the scheduled weekday theme for 2026-04-20, which is mathematician birthdays and history.",
+      "reasons": [
+        "Matches the Monday theme: Mathematician birthdays and history.",
+        "Suitable for Thai-language drafting after verification on 2026-04-20.",
+        "Any factual claims still require trusted-source retrieval and explicit date-link verification before posting.",
+        "This weekday theme appeared recently, so a small repeat penalty was applied."
+      ],
+      "base_score": 0.7,
+      "duplicate_penalty": 0.05,
+      "final_score": 0.6499999999999999,
+      "requires_retrieval": true
+    },
+    {
+      "title": "Emmy Noether กับแนวคิดสมมาตรที่เปลี่ยนวิทยาศาสตร์",
+      "slug": "noether-symmetry-impact",
+      "theme_slug": "history",
+      "theme_label": "Mathematician birthdays and history",
+      "angle": "historical_profile",
+      "entity": "Emmy Noether",
+      "date_link_type": "weekday_theme",
+      "date_link_explanation": "This candidate fits the scheduled weekday theme for 2026-04-20, which is mathematician birthdays and history.",
+      "reasons": [
+        "Matches the Monday theme: Mathematician birthdays and history.",
+        "Suitable for Thai-language drafting after verification on 2026-04-20.",
+        "Any factual claims still require trusted-source retrieval and explicit date-link verification before posting.",
+        "This weekday theme appeared recently, so a small repeat penalty was applied."
+      ],
+      "base_score": 0.6799999999999999,
+      "duplicate_penalty": 0.05,
+      "final_score": 0.6299999999999999,
+      "requires_retrieval": true
+    },
+    {
+      "title": "Euclid กับรากฐานของการพิสูจน์อย่างเป็นระบบ",
+      "slug": "euclid-axiomatic-proof",
+      "theme_slug": "history",
+      "theme_label": "Mathematician birthdays and history",
+      "angle": "historical_profile",
+      "entity": "Euclid",
+      "date_link_type": "weekday_theme",
+      "date_link_explanation": "This candidate fits the scheduled weekday theme for 2026-04-20, which is mathematician birthdays and history.",
+      "reasons": [
+        "Matches the Monday theme: Mathematician birthdays and history.",
+        "Suitable for Thai-language drafting after verification on 2026-04-20.",
+        "Any factual claims still require trusted-source retrieval and explicit date-link verification before posting.",
+        "This weekday theme appeared recently, so a small repeat penalty was applied."
+      ],
+      "base_score": 0.66,
+      "duplicate_penalty": 0.05,
+      "final_score": 0.61,
+      "requires_retrieval": true
+    },
+    {
+      "title": "Euler กับภาษาสัญลักษณ์ของคณิตศาสตร์สมัยใหม่",
+      "slug": "euler-modern-notation",
+      "theme_slug": "history",
+      "theme_label": "Mathematician birthdays and history",
+      "angle": "historical_profile",
+      "entity": "Leonhard Euler",
+      "date_link_type": "weekday_theme",
+      "date_link_explanation": "This candidate fits the scheduled weekday theme for 2026-04-20, which is mathematician birthdays and history.",
+      "reasons": [
+        "Matches the Monday theme: Mathematician birthdays and history.",
+        "Suitable for Thai-language drafting after verification on 2026-04-20.",
+        "Any factual claims still require trusted-source retrieval and explicit date-link verification before posting.",
+        "Recent history contains the same topic title, so the score is reduced.",
+        "Recent history contains the same mathematician or concept, so the score is reduced.",
+        "This weekday theme appeared recently, so a small repeat penalty was applied."
+      ],
+      "base_score": 0.74,
+      "duplicate_penalty": 0.45,
+      "final_score": 0.29,
+      "requires_retrieval": true
+    }
+  ],
+  "generated_at": "2026-04-20T16:00:00+07:00"
+}

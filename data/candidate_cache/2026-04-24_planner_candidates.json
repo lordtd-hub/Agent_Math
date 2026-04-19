@@ -1,0 +1,124 @@
+{
+  "run_date": "2026-04-24",
+  "weekday_name": "Friday",
+  "theme_slug": "applications",
+  "theme_label": "Mathematics in real life",
+  "output_language": "th",
+  "selected_candidate": {
+    "title": "จำนวนเฉพาะกับเบื้องหลังการเข้ารหัสข้อมูล",
+    "slug": "primes-and-cryptography",
+    "theme_slug": "applications",
+    "theme_label": "Mathematics in real life",
+    "angle": "real_life_application",
+    "entity": "Prime numbers",
+    "date_link_type": "weekday_theme",
+    "date_link_explanation": "This candidate fits the scheduled weekday theme for 2026-04-24, which is mathematics in real life.",
+    "reasons": [
+      "Matches the Friday theme: Mathematics in real life.",
+      "Suitable for Thai-language drafting after verification on 2026-04-24.",
+      "Any factual claims still require trusted-source retrieval and explicit date-link verification before posting."
+    ],
+    "base_score": 0.76,
+    "duplicate_penalty": 0.0,
+    "final_score": 0.76,
+    "requires_retrieval": true
+  },
+  "candidates": [
+    {
+      "title": "จำนวนเฉพาะกับเบื้องหลังการเข้ารหัสข้อมูล",
+      "slug": "primes-and-cryptography",
+      "theme_slug": "applications",
+      "theme_label": "Mathematics in real life",
+      "angle": "real_life_application",
+      "entity": "Prime numbers",
+      "date_link_type": "weekday_theme",
+      "date_link_explanation": "This candidate fits the scheduled weekday theme for 2026-04-24, which is mathematics in real life.",
+      "reasons": [
+        "Matches the Friday theme: Mathematics in real life.",
+        "Suitable for Thai-language drafting after verification on 2026-04-24.",
+        "Any factual claims still require trusted-source retrieval and explicit date-link verification before posting."
+      ],
+      "base_score": 0.76,
+      "duplicate_penalty": 0.0,
+      "final_score": 0.76,
+      "requires_retrieval": true
+    },
+    {
+      "title": "GPS ใช้แนวคิดระยะทางสั้นที่สุดอย่างไร",
+      "slug": "gps-shortest-path",
+      "theme_slug": "applications",
+      "theme_label": "Mathematics in real life",
+      "angle": "real_life_application",
+      "entity": "Shortest path",
+      "date_link_type": "weekday_theme",
+      "date_link_explanation": "This candidate fits the scheduled weekday theme for 2026-04-24, which is mathematics in real life.",
+      "reasons": [
+        "Matches the Friday theme: Mathematics in real life.",
+        "Suitable for Thai-language drafting after verification on 2026-04-24.",
+        "Any factual claims still require trusted-source retrieval and explicit date-link verification before posting."
+      ],
+      "base_score": 0.74,
+      "duplicate_penalty": 0.0,
+      "final_score": 0.74,
+      "requires_retrieval": true
+    },
+    {
+      "title": "ความน่าจะเป็นช่วยอ่านผลตรวจทางการแพทย์อย่างรอบคอบได้อย่างไร",
+      "slug": "probability-medical-testing",
+      "theme_slug": "applications",
+      "theme_label": "Mathematics in real life",
+      "angle": "real_life_application",
+      "entity": "Conditional probability",
+      "date_link_type": "weekday_theme",
+      "date_link_explanation": "This candidate fits the scheduled weekday theme for 2026-04-24, which is mathematics in real life.",
+      "reasons": [
+        "Matches the Friday theme: Mathematics in real life.",
+        "Suitable for Thai-language drafting after verification on 2026-04-24.",
+        "Any factual claims still require trusted-source retrieval and explicit date-link verification before posting."
+      ],
+      "base_score": 0.72,
+      "duplicate_penalty": 0.0,
+      "final_score": 0.72,
+      "requires_retrieval": true
+    },
+    {
+      "title": "เมทริกซ์และพีชคณิตเชิงเส้นในงานบีบอัดภาพ",
+      "slug": "linear-algebra-image-compression",
+      "theme_slug": "applications",
+      "theme_label": "Mathematics in real life",
+      "angle": "real_life_application",
+      "entity": "Linear algebra",
+      "date_link_type": "weekday_theme",
+      "date_link_explanation": "This candidate fits the scheduled weekday theme for 2026-04-24, which is mathematics in real life.",
+      "reasons": [
+        "Matches the Friday theme: Mathematics in real life.",
+        "Suitable for Thai-language drafting after verification on 2026-04-24.",
+        "Any factual claims still require trusted-source retrieval and explicit date-link verification before posting."
+      ],
+      "base_score": 0.7,
+      "duplicate_penalty": 0.0,
+      "final_score": 0.7,
+      "requires_retrieval": true
+    },
+    {
+      "title": "สมการเชิงอนุพันธ์กับการพยากรณ์อากาศ",
+      "slug": "differential-equations-weather",
+      "theme_slug": "applications",
+      "theme_label": "Mathematics in real life",
+      "angle": "real_life_application",
+      "entity": "Differential equations",
+      "date_link_type": "weekday_theme",
+      "date_link_explanation": "This candidate fits the scheduled weekday theme for 2026-04-24, which is mathematics in real life.",
+      "reasons": [
+        "Matches the Friday theme: Mathematics in real life.",
+        "Suitable for Thai-language drafting after verification on 2026-04-24.",
+        "Any factual claims still require trusted-source retrieval and explicit date-link verification before posting."
+      ],
+      "base_score": 0.68,
+      "duplicate_penalty": 0.0,
+      "final_score": 0.68,
+      "requires_retrieval": true
+    }
+  ],
+  "generated_at": "2026-04-24T09:00:00+07:00"
+}

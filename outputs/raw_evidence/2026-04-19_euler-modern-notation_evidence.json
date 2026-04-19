@@ -1,0 +1,25 @@
+{
+  "content_mode": "STANDARD_MATH_MODE",
+  "candidate_slug": "euler-modern-notation",
+  "candidate_title": "Euler กับภาษาสัญลักษณ์ของคณิตศาสตร์สมัยใหม่",
+  "generated_at": "2026-04-19T00:58:12+00:00",
+  "allowed_items": [
+    {
+      "title": "Euler",
+      "source": "MathWorld",
+      "url": "https://mathworld.wolfram.com/Euler.html",
+      "excerpt": "Reference excerpt",
+      "source_type": "reference",
+      "source_tier": "tier_2",
+      "published_at": "2024-01-01",
+      "content_mode": "STANDARD_MATH_MODE",
+      "candidate_slug": "euler-modern-notation",
+      "candidate_title": "Euler กับภาษาสัญลักษณ์ของคณิตศาสตร์สมัยใหม่",
+      "confidence_notes": [
+        "Source matched allowlist tier tier_2.",
+        "Published/page date metadata was captured for later date relevance checks."
+      ]
+    }
+  ],
+  "rejected_urls": []
+}

@@ -1,0 +1,41 @@
+{
+  "content_mode": "NEWS_MODE",
+  "candidate_slug": "telescope-orbital-model",
+  "candidate_title": "New telescope data sharpens orbital model",
+  "generated_at": "2026-04-19T00:58:11+00:00",
+  "allowed_items": [
+    {
+      "title": "Orbital model update",
+      "source": "SIAM",
+      "url": "https://www.siam.org/news/orbital-model",
+      "excerpt": "SIAM reported a clearer orbital model in 2026 using updated mathematical analysis.",
+      "source_type": "news",
+      "source_tier": "tier_1",
+      "published_at": "2026-04-18",
+      "content_mode": "NEWS_MODE",
+      "candidate_slug": "telescope-orbital-model",
+      "candidate_title": "New telescope data sharpens orbital model",
+      "confidence_notes": [
+        "Source matched allowlist tier tier_1.",
+        "Published/page date metadata was captured for later news recency checks."
+      ]
+    },
+    {
+      "title": "Observatory follow-up",
+      "source": "AMS",
+      "url": "https://www.ams.org/news/orbital-model-follow-up",
+      "excerpt": "AMS summarized the same 2026 result and its connection to mathematical modeling.",
+      "source_type": "news",
+      "source_tier": "tier_1",
+      "published_at": "2026-04-19",
+      "content_mode": "NEWS_MODE",
+      "candidate_slug": "telescope-orbital-model",
+      "candidate_title": "New telescope data sharpens orbital model",
+      "confidence_notes": [
+        "Source matched allowlist tier tier_1.",
+        "Published/page date metadata was captured for later news recency checks."
+      ]
+    }
+  ],
+  "rejected_urls": []
+}

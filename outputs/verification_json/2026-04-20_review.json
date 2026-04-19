@@ -1,0 +1,24 @@
+{
+  "run_date": "2026-04-20",
+  "content_mode": "STANDARD_MATH_MODE",
+  "proposed_topic": "Gauss กับจุดเปลี่ยนของทฤษฎีจำนวน",
+  "why_relevant": "วันที่ 2026-04-20 ตรงกับธีมวันจันทร์ของเพจ",
+  "thai_draft": "วันนี้ภาควิชาคณิตศาสตร์ชวนมองเรื่อง Gauss กับจุดเปลี่ยนของทฤษฎีจำนวน\n\n#คณิตศาสตร์",
+  "fact_summary": [
+    "AMS: Historical source describing Gauss and number theory."
+  ],
+  "short_references": [
+    "AMS - Gauss biography",
+    "Mactutor - Gauss archive"
+  ],
+  "full_references": [
+    "AMS. Gauss biography (2024-01-01). https://www.ams.org/gauss",
+    "Mactutor. Gauss archive (2024-01-02). https://mathshistory.st-andrews.ac.uk/Gauss/"
+  ],
+  "verification_notes": [
+    "Standard topic verification passed.",
+    "Ready for review."
+  ],
+  "confidence": 0.9,
+  "status": "PENDING_REVIEW"
+}

@@ -1,0 +1,48 @@
+name: Weekday Review Email
+
+on:
+  schedule:
+    - cron: "0 23 * * 0-4"
+  workflow_dispatch:
+
+jobs:
+  generate-and-email:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: src
+      TIMEZONE: Asia/Bangkok
+      POST_MODE: draft_only
+      FACEBOOK_DRY_RUN: "true"
+      REVIEW_EMAIL_TO: lordtd@gmail.com
+      SMTP_HOST: ${{ secrets.SMTP_HOST }}
+      SMTP_PORT: ${{ secrets.SMTP_PORT }}
+      SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+      SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+      SMTP_USE_TLS: ${{ secrets.SMTP_USE_TLS }}
+      EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate daily review
+        run: python -m math_content_agent.scheduler generate-review
+
+      - name: Email daily review
+        run: python -m math_content_agent.emailer
+
+      - name: Upload generated artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-review-artifacts
+          path: |
+            outputs/daily_reviews/
+            outputs/verification_json/
+            outputs/approvals/
+            outputs/raw_evidence/
+            outputs/logs/
+            data/candidate_cache/
