@@ -254,3 +254,60 @@ class PublishResult:
     scheduled_publish_time: str | None = None
     response_payload: dict[str, object] | None = None
     error_message: str | None = None
+
+
+@dataclass(frozen=True)
+class EDocumentListEntry:
+    """One incoming Saraban row as seen on the pending-receive list."""
+
+    row_index: int
+    raw_text: str
+    document_number: str | None
+    document_date: str | None
+    subject: str
+    sender: str | None
+    recipient: str | None
+    sent_at: str | None
+    sent_date: date | None
+    status: str
+    urgency: str | None = None
+
+
+@dataclass(frozen=True)
+class EDocumentDetail:
+    """Structured fields collected from a document detail page."""
+
+    detail_url: str
+    document_number: str | None
+    document_date: str | None
+    subject: str
+    sender: str | None
+    recipient: str | None
+    urgency: str | None
+    purpose: str | None
+    detail_note: str | None
+    attachment_names: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class EDocumentDigestDocument:
+    """One document included in an eDocument digest run."""
+
+    listing: EDocumentListEntry
+    detail: EDocumentDetail | None
+    summary_points: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class EDocumentDigestRun:
+    """Top-level result for one read-only eDocument digest execution."""
+
+    run_at: datetime
+    run_date: date
+    lookback_days: int
+    login_url: str
+    status: str
+    scanned_rows: int
+    matched_documents: list[EDocumentDigestDocument] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)

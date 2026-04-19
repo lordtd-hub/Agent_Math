@@ -1,0 +1,63 @@
+name: eDocument Digest
+
+on:
+  schedule:
+    - cron: "30 4 * * 1-5"
+    - cron: "30 8 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      run_now:
+        description: "Optional ISO timestamp override for manual testing, e.g. 2026-04-20T11:30:00+07:00"
+        required: false
+        type: string
+
+jobs:
+  edocument-digest:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: src
+      TIMEZONE: Asia/Bangkok
+      EDOC_LOGIN_URL: https://sru.e-office.cloud/api/auth/login
+      EDOC_USERNAME: ${{ secrets.EDOC_USERNAME }}
+      EDOC_PASSWORD: ${{ secrets.EDOC_PASSWORD }}
+      EDOC_EMAIL_TO: ${{ secrets.EDOC_EMAIL_TO }}
+      EDOC_LOOKBACK_DAYS: "1"
+      EDOC_MAX_DOCUMENTS: "10"
+      SMTP_HOST: ${{ secrets.SMTP_HOST }}
+      SMTP_PORT: ${{ secrets.SMTP_PORT }}
+      SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+      SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+      SMTP_USE_TLS: ${{ secrets.SMTP_USE_TLS }}
+      EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install project dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Install Playwright browser
+        run: python -m playwright install --with-deps chromium
+
+      - name: Run read-only eDocument digest
+        run: |
+          if [ -n "${{ github.event.inputs.run_now }}" ]; then
+            python -m math_content_agent.edocument_scheduler --now "${{ github.event.inputs.run_now }}"
+          else
+            python -m math_content_agent.edocument_scheduler
+          fi
+
+      - name: Upload eDocument logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: edocument-digest-logs
+          if-no-files-found: ignore
+          path: outputs/logs/*_edocument_digest.json

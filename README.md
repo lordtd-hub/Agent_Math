@@ -86,6 +86,38 @@ Recommended setup notes:
 - The workflow schedule uses UTC under the hood, but it is already mapped to 06:00 Bangkok time.
 - If you want to test it immediately from the Actions tab on a weekend, run `workflow_dispatch` and set `review_now` to a weekday timestamp such as `2026-04-20T06:00:00+07:00`.
 
+## GitHub eDocument Digest
+
+The repository also includes [edocument_digest.yml](/C:/Users/User/Documents/Agent_math/.github/workflows/edocument_digest.yml), which runs a read-only SRU eDocument digest every Monday-Friday at 11:30 and 15:30 Asia/Bangkok.
+
+Behavior:
+
+- logs into the SRU eDocument portal
+- opens Saraban pending receive documents
+- filters to items sent today or yesterday that are still `รอรับ`
+- opens each matching detail page and collects metadata plus attachment names when available
+- sends one Thai summary email
+- does not accept documents yet in this phase
+
+Required GitHub Actions secrets:
+
+- `EDOC_USERNAME`
+- `EDOC_PASSWORD`
+- `EDOC_EMAIL_TO`
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_USERNAME`
+- `SMTP_PASSWORD`
+- `SMTP_USE_TLS`
+- `EMAIL_FROM`
+
+Recommended setup notes:
+
+- Start with this workflow as read-only and confirm the summaries look correct before adding any accept action.
+- Keep the eDocument account scope as narrow as possible.
+- The workflow uploads only the JSON digest log, not the raw documents or downloaded attachments.
+- For manual testing from the Actions tab, use `workflow_dispatch` with `run_now`, for example `2026-04-20T11:30:00+07:00`.
+
 ## Project Layout
 
 ```text
